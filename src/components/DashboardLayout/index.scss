@@ -1,0 +1,95 @@
+
+.mg-button {
+  min-width: 168px;
+  height: 32px;
+  background-color: #1CA1C1;
+  border: 0;
+  border-radius: 2px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #FFFFFF;
+  cursor: pointer;
+  outline: none;
+
+  .focus {
+    background-color: #1992AF;
+  }
+}
+
+.react-grid-layout {
+  background-color: rgb(247, 248, 249);
+
+  .react-grid-item {
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    background-color: white;
+    cursor: move;
+    display: flex;
+    align-items: center;
+
+    &.react-draggable-dragging {
+      z-index: 10;
+      opacity: 0.8;
+    }
+    &.resizing {
+      z-index: 10;
+      opacity: 0.8;
+    }
+    & > div {
+      margin: 15px;
+      width: 100%;
+    }
+    & .text {
+      font-size: 24px;  
+      text-align: center;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      height: 24px;
+    }
+    .react-resizable-handle {
+      visibility: hidden;
+
+      &::after {
+        background-image: url(../../assets/svg/drag-handle.svg);
+        content: "";
+        position: absolute;
+        right: 3px;
+        bottom: 3px;
+        width: 12px;
+        height: 12px;
+        border: none;
+      }
+    }
+    &:hover .react-resizable-handle {
+      visibility: visible;
+    }
+    .react-resizable-edit-handle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 3px;
+      right: 3px;
+      cursor: pointer;
+      color: rgb(240, 115, 79);
+
+      &::after {
+        content: "\f013";
+        position: absolute;
+        right: 3px;
+        top: 3px;
+        width: 12px;
+        height: 12px;
+        border: none;
+      }
+    }
+  }
+
+  .react-grid-placeholder {
+    border: dashed 2px rgb(203, 210, 219) !important;
+    background-color: rgb(225, 229, 234) !important;
+    opacity: 1 !important;
+  }
+}
