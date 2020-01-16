@@ -108,7 +108,12 @@ export default class DashboardLayout extends React.PureComponent {
           showAction
           onAction={() => this.setState({ formOpened: true })}
         />
-        <WidgetEditForm open={formOpened} onSave={() => {}} onClose={() => this.setState({ formOpened: false })} />
+        <WidgetEditForm
+          open={formOpened}
+          isEditMode={true}
+          onSave={() => {}}
+          onClose={() => this.setState({ formOpened: false })}
+        />
         <ReactGridLayout
           layout={(layout && layout.map((item) => item.layout)) || []}
           onLayoutChange={this.onLayoutChange}

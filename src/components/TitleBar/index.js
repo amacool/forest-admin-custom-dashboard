@@ -3,12 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
+import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles(() => ({
   root: {
-    flexGrow: 1,
+    flex: 1,
     marginBottom: 1,
   },
   bar: {
@@ -20,16 +20,6 @@ const useStyles = makeStyles(() => ({
     color: (props) => props.color,
     fontSize: (props) => props.fontSize,
   },
-  actionButton: {
-    backgroundColor: (props) => props.actionButton.backgroundColor,
-    color: (props) => props.actionButton.color,
-    border: (props) => `1px solid ${props.actionButton.borderColor}`,
-    textTransform: 'none',
-    padding: '3px 15px',
-    '&:hover': {
-      backgroundColor: (props) => props.actionButton.hoverBackgroundColor,
-    },
-  },
 }));
 
 export default function TitleBar({
@@ -38,13 +28,7 @@ export default function TitleBar({
   const props = {
     backgroundColor,
     color,
-    fontSize,
-    actionButton: {
-      backgroundColor: 'rgb(240, 115, 79)',
-      hoverBackgroundColor: 'rgb(203, 102, 77)',
-      color: 'white',
-      borderColor: 'rgb(191, 78, 45)',
-    },
+    fontSize
   };
   const classes = useStyles(props);
 
@@ -56,7 +40,7 @@ export default function TitleBar({
             {title}
           </Typography>
           {showAction && (
-            <Button color="primary" className={classes.actionButton} onClick={onAction}>Add a new widget</Button>
+            <CustomButton text="Add a new widget" color="primary" onAction={onAction} />
           )}
         </Toolbar>
       </AppBar>

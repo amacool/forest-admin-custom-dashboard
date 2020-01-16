@@ -5,6 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   root: {
     cursor: 'pointer',
+    '&:hover': {
+      filter: 'brightness(0.95)'
+    },
     '&.initial': {
       backgroundColor: 'rgb(247,248,249)',
       '& > div:first-child': {

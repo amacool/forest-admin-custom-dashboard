@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,16 +11,20 @@ import ToggleOffIcon from '@material-ui/icons/ToggleOff';
 import TitleBar from '../TitleBar';
 import FormTextField from '../FormTextField';
 import WidgetCard from './WidgetCard';
-
-const successColor = '#54bd7e';
+import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles((theme) => ({
   list: {
     width: 650,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
   actionButton: {
   },
   formBody: {
+    flex: '1 1 auto',
     padding: theme.spacing(3),
   },
   stepWrapper: {
@@ -32,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   stepNumber: {
     width: 40,
     height: 40,
-    backgroundColor: successColor,
+    backgroundColor: '#54bd7e',
     marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -53,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   stepState1: {
-    backgroundColor: successColor,
+    backgroundColor: '#54bd7e'
   },
   stepState2: {
     backgroundColor: 'rgb(65, 85, 116)',
@@ -64,10 +67,21 @@ const useStyles = makeStyles((theme) => ({
   },
   formRow: {
     marginBottom: theme.spacing(4),
+  },
+  submitWrapper: {
+    backgroundColor: 'white',
+    '& > div': {
+      justifyContent: 'space-between'
+    }
+  },
+  submitRight: {
+    width: 190,
+    display: 'flex',
+    justifyContent: 'space-between'
   }
 }));
 
-export default function WidgetEditForm({ open, onSave, onClose }) {
+export default function WidgetEditForm({ open, onSave, onClose, onDelete, isEditMode }) {
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -138,7 +152,6 @@ export default function WidgetEditForm({ open, onSave, onClose }) {
       </div>
     );
   };
-  console.log(values);
 
   const sideList = () => (
     <div
@@ -146,6 +159,7 @@ export default function WidgetEditForm({ open, onSave, onClose }) {
       role="presentation"
     >
       <TitleBar title="Add a new widget" color="black" backgroundColor="white" showAction={false} />
+      
       <div className={classes.formBody}>
         {showStep(1, step, 'Describe your widget', 'Give your widget a name and a description to explain its purpose.')}
 
@@ -221,9 +235,14 @@ export default function WidgetEditForm({ open, onSave, onClose }) {
           </Grid>
         </Grid>
       </div>
-      <AppBar position="static">
+      
+      <AppBar position="static" className={classes.submitWrapper}>
         <Toolbar>
-          <Button color="primary" onClick={onSave}>Save</Button>
+          <CustomButton text="Cancel" color="default" onAction={toggleDrawer('right', false)} />
+          <div className={classes.submitRight}>
+            {isEditMode && <CustomButton text="Delete" color="primary" onAction={onDelete} />}
+            <CustomButton text="Save" color="success" onAction={onSave} />
+          </div>
         </Toolbar>
       </AppBar>
     </div>
@@ -240,4 +259,11 @@ WidgetEditForm.propTypes = {
   open: PropTypes.bool.isRequired,
   onSave: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
+  isEditMode: PropTypes.bool
+};
+
+TitleBar.defaultProps = {
+  onDelete: () => {},
+  isEditMode: false
 };
