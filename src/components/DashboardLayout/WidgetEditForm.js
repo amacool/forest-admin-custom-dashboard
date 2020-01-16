@@ -8,6 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import ToggleOffIcon from '@material-ui/icons/ToggleOff';
+import Switch from '@material-ui/core/Switch';
 import TitleBar from '../TitleBar';
 import FormTextField from '../FormTextField';
 import WidgetCard from './WidgetCard';
@@ -78,6 +79,16 @@ const useStyles = makeStyles((theme) => ({
     width: 190,
     display: 'flex',
     justifyContent: 'space-between'
+  },
+  switchWrapper: {
+    '& > label': {
+      margin: '0',
+      color: '#415574',
+      display: 'block'
+    },
+    '& > span': {
+      marginTop: -3
+    }
   }
 }));
 
@@ -122,7 +133,13 @@ export default function WidgetEditForm({ open, onSave, onClose, onDelete, isEdit
   };
 
   const handleChangeType = (type) => {
-    setValues({ ...values, type });
+    let defaultValue = values.defaultValue;
+    if (type === 2 && typeof defaultValue !== 'boolean') {
+      defaultValue = false;
+    } else if (type !== 2 && typeof defaultValue !== 'string') {
+      defaultValue = '';
+    }
+    setValues({ ...values, defaultValue, type });
   }
 
   const toggleDrawer = (side, open) => (event) => {
@@ -226,12 +243,23 @@ export default function WidgetEditForm({ open, onSave, onClose, onDelete, isEdit
             />
           </Grid>
           <Grid item xs={6}>
-            <FormTextField
-              id="defaultValue"
-              label="Default Value"
-              value={values.defaultValue}
-              onChange={(e) => handleChange(e, 3)}
-            />
+            {values.type !== 2 ? (
+              <FormTextField
+                id="defaultValue"
+                label="Default Value"
+                value={values.defaultValue}
+                onChange={(e) => handleChange(e, 3)}
+              />) : (
+              <div className={classes.switchWrapper}>
+                <label htmlFor="defaultValue">Default Value</label>
+                <Switch
+                  id="defaultValue"
+                  checked={values.defaultValue}
+                  color="primary"
+                  onChange={(e) => handleChange({ target: { value: e.target.checked, id: 'defaultValue' } }, 3)}
+                />
+              </div>
+            )}
           </Grid>
         </Grid>
       </div>

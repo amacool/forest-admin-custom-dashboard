@@ -64,7 +64,7 @@ export default class DashboardLayout extends React.PureComponent {
         <FileUploadComponent
           label={item.label}
           keyValue={item.keyValue}
-          defaultValue={item.defaultValue}
+          defaultValue={item.defaultValue ? [item.defaultValue] : []}
           fileTypes={['image/jpeg', 'image/png', 'image/bmp']}
           onChange={() => {}}
         />
