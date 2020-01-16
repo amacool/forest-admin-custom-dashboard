@@ -1,11 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import TextFieldsIcon from '@material-ui/icons/TextFields';
+import ToggleOffIcon from '@material-ui/icons/ToggleOff';
 import TitleBar from '../TitleBar';
-import CustomTextField from '../CustomTextField';
+import FormTextField from '../FormTextField';
+import WidgetCard from './WidgetCard';
 
 const successColor = '#54bd7e';
 
@@ -56,6 +62,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'rgb(247, 248, 249)',
     color: 'rgb(163, 173, 187)',
   },
+  formRow: {
+    marginBottom: theme.spacing(4),
+  }
 }));
 
 export default function WidgetEditForm({ open, onSave, onClose }) {
@@ -70,6 +79,8 @@ export default function WidgetEditForm({ open, onSave, onClose }) {
     name: '',
     description: '',
     type: 0,
+    label: '',
+    defaultValue: ''
   });
   const [step, setStep] = React.useState(1);
 
@@ -95,6 +106,10 @@ export default function WidgetEditForm({ open, onSave, onClose }) {
       [e.target.id]: e.target.value,
     });
   };
+
+  const handleChangeType = (type) => {
+    setValues({ ...values, type });
+  }
 
   const toggleDrawer = (side, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -123,6 +138,7 @@ export default function WidgetEditForm({ open, onSave, onClose }) {
       </div>
     );
   };
+  console.log(values);
 
   const sideList = () => (
     <div
@@ -132,9 +148,10 @@ export default function WidgetEditForm({ open, onSave, onClose }) {
       <TitleBar title="Add a new widget" color="black" backgroundColor="white" showAction={false} />
       <div className={classes.formBody}>
         {showStep(1, step, 'Describe your widget', 'Give your widget a name and a description to explain its purpose.')}
-        <Grid container spacing={3}>
+
+        <Grid container spacing={3} className={classes.formRow}>
           <Grid item xs={6}>
-            <CustomTextField
+            <FormTextField
               id="name"
               label="Name"
               value={values.name}
@@ -142,30 +159,73 @@ export default function WidgetEditForm({ open, onSave, onClose }) {
             />
           </Grid>
           <Grid item xs={6}>
-            <CustomTextField
+            <FormTextField
               id="description"
               label="Description"
               value={values.description}
-              onChange={handleChange}
+              onChange={(e) => handleChange(e, 1)}
             />
           </Grid>
-          <Grid item xs={6} />
         </Grid>
+
         {showStep(2, step, 'Choose a widget type', 'Configure the kind of widget you want to render.')}
-        {showStep(3, step, 'Input values', 'Input various values of the selected widget.')}
-        <Grid container spacing={3}>
+
+        <Grid container spacing={3} className={classes.formRow}>
           <Grid item xs={4}>
-            String
+            <WidgetCard
+              icon={<TextFieldsIcon/>}
+              title="String Widget"
+              description="Displays a input text widget"
+              handleClick={() => handleChangeType(1)}
+              color={values.type === 1 ? "success" : "initial"}
+            />
           </Grid>
           <Grid item xs={4}>
-            Toggle
+            <WidgetCard
+              icon={<ToggleOffIcon/>}
+              title="Toggle Widget"
+              description="Displays a toggle widget"
+              handleClick={() => handleChangeType(2)}
+              color={values.type === 2 ? "success" : "initial"}
+            />
           </Grid>
           <Grid item xs={4}>
-            Upload
+            <WidgetCard
+              icon={<CloudUploadIcon/>}
+              title="Upload Widget"
+              description="Displays a file upload widget"
+              handleClick={() => handleChangeType(3)}
+              color={values.type === 3 ? "success" : "initial"}
+            />
           </Grid>
         </Grid>
-        <Button color="primary" onClick={onSave}>Save</Button>
+
+        {showStep(3, step, 'Input values', 'Input various values of the selected widget.')}
+
+        <Grid container spacing={3} className={classes.formRow}>
+          <Grid item xs={6}>
+            <FormTextField
+              id="label"
+              label="Label"
+              value={values.label}
+              onChange={(e) => handleChange(e, 3)}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <FormTextField
+              id="defaultValue"
+              label="Default Value"
+              value={values.defaultValue}
+              onChange={(e) => handleChange(e, 3)}
+            />
+          </Grid>
+        </Grid>
       </div>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="primary" onClick={onSave}>Save</Button>
+        </Toolbar>
+      </AppBar>
     </div>
   );
 
