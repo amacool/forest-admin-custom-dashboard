@@ -3,7 +3,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
-// import uuidv4 from 'uuid/v4';
+import uuidv4 from 'uuid/v4';
 import StringComponent from '../Widgets/StringComponent';
 import ToggleComponent from '../Widgets/ToggleComponent';
 import FileUploadComponent from '../Widgets/FileUploadComponent';
@@ -93,6 +93,36 @@ export default class DashboardLayout extends React.PureComponent {
     </div>
   ))
 
+  handleAddWidget = (values) => {
+    const keyValue = uuidv4();
+    const w = values.type === 3 ? 3 : 2;
+    const h = values.type === 3 ? 3 : 1;
+    const minW = values.type === 3 ? 3 : 2;
+    const minH = values.type === 3 ? 3 : 1;
+
+    this.setState({
+      layout: [
+        ...this.state.layout,
+        {
+          w,
+          h,
+          x: 0,
+          y: 0,
+          i: keyValue,
+          minW,
+          minH,
+          static: false,
+          isDraggable: true,
+          isResizable: true,
+        }
+      ],
+      info: [
+        ...this.state.info,
+        { ...values, keyValue },
+      ]
+    });
+  };
+
   render() {
     const {
       className, rowHeight, cols, children,
@@ -111,7 +141,7 @@ export default class DashboardLayout extends React.PureComponent {
         <WidgetEditForm
           open={formOpened}
           isEditMode={true}
-          onSave={() => {}}
+          onSave={this.handleAddWidget}
           onClose={() => this.setState({ formOpened: false })}
         />
         <ReactGridLayout

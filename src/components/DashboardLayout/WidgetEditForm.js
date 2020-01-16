@@ -241,7 +241,7 @@ export default function WidgetEditForm({ open, onSave, onClose, onDelete, isEdit
           <CustomButton text="Cancel" color="default" onAction={toggleDrawer('right', false)} />
           <div className={classes.submitRight}>
             {isEditMode && <CustomButton text="Delete" color="primary" onAction={onDelete} />}
-            <CustomButton text="Save" color="success" onAction={onSave} />
+            <CustomButton text="Save" color="success" onAction={() => onSave(values)} />
           </div>
         </Toolbar>
       </AppBar>
