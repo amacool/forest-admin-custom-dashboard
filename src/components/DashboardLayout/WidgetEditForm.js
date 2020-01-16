@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import uuidv4 from 'uuid/v4';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
@@ -92,6 +93,27 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const widgets = [
+  {
+    icon: <TextFieldsIcon/>,
+    title: "String Widget",
+    description: "Displays a input text widget",
+    type: 1,
+  },
+  {
+    icon: <ToggleOffIcon/>,
+    title: "Toggle Widget",
+    description: "Displays a toggle widget",
+    type: 2,
+  },
+  {
+    icon: <CloudUploadIcon/>,
+    title: "Upload Widget",
+    description: "Displays a file upload widget",
+    type: 3,
+  }
+];
+
 export default function WidgetEditForm({ open, onSave, onClose, onDelete, isEditMode }) {
   const classes = useStyles();
   const [state, setState] = React.useState({
@@ -110,6 +132,13 @@ export default function WidgetEditForm({ open, onSave, onClose, onDelete, isEdit
   const [step, setStep] = React.useState(1);
 
   React.useEffect(() => {
+    setValues({
+      name: '',
+      description: '',
+      type: 0,
+      label: '',
+      defaultValue: ''
+    });
     setState({ right: open });
   }, [open]);
 
@@ -140,6 +169,13 @@ export default function WidgetEditForm({ open, onSave, onClose, onDelete, isEdit
       defaultValue = '';
     }
     setValues({ ...values, defaultValue, type });
+  }
+
+  const handleSave = () => {
+    if (!values.name || !values.description || !values.type || !values.label) {
+      return;
+    }
+    onSave(values);
   }
 
   const toggleDrawer = (side, open) => (event) => {
@@ -202,33 +238,17 @@ export default function WidgetEditForm({ open, onSave, onClose, onDelete, isEdit
         {showStep(2, step, 'Choose a widget type', 'Configure the kind of widget you want to render.')}
 
         <Grid container spacing={3} className={classes.formRow}>
-          <Grid item xs={4}>
-            <WidgetCard
-              icon={<TextFieldsIcon/>}
-              title="String Widget"
-              description="Displays a input text widget"
-              handleClick={() => handleChangeType(1)}
-              color={values.type === 1 ? "success" : "initial"}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <WidgetCard
-              icon={<ToggleOffIcon/>}
-              title="Toggle Widget"
-              description="Displays a toggle widget"
-              handleClick={() => handleChangeType(2)}
-              color={values.type === 2 ? "success" : "initial"}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <WidgetCard
-              icon={<CloudUploadIcon/>}
-              title="Upload Widget"
-              description="Displays a file upload widget"
-              handleClick={() => handleChangeType(3)}
-              color={values.type === 3 ? "success" : "initial"}
-            />
-          </Grid>
+          {widgets.map(item => (
+            <Grid item xs={4} key={uuidv4()}>
+              <WidgetCard
+                icon={item.icon}
+                title={item.title}
+                description={item.description}
+                handleClick={() => handleChangeType(item.type)}
+                color={values.type === item.type ? "success" : "initial"}
+              />
+            </Grid>
+          ))}
         </Grid>
 
         {showStep(3, step, 'Input values', 'Input various values of the selected widget.')}
@@ -268,8 +288,8 @@ export default function WidgetEditForm({ open, onSave, onClose, onDelete, isEdit
         <Toolbar>
           <CustomButton text="Cancel" color="default" onAction={toggleDrawer('right', false)} />
           <div className={classes.submitRight}>
-            {isEditMode && <CustomButton text="Delete" color="primary" onAction={onDelete} />}
-            <CustomButton text="Save" color="success" onAction={() => onSave(values)} />
+            {isEditMode ? <CustomButton text="Delete" color="primary" onAction={onDelete} /> : <div/>}
+            <CustomButton text="Save" color="success" onAction={handleSave} />
           </div>
         </Toolbar>
       </AppBar>

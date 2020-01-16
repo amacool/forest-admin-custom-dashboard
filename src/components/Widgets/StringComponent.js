@@ -40,6 +40,7 @@ const StringComponent = ({
         value={value}
         inputProps={{ 'aria-label': 'description' }}
         color={color}
+        onMouseDown={(e) => e.stopPropagation()}
         onChange={(e) => {
           setValue(e.target.value);
           onChange(e.target.value);

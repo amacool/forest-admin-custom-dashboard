@@ -119,7 +119,8 @@ export default class DashboardLayout extends React.PureComponent {
       info: [
         ...this.state.info,
         { ...values, keyValue },
-      ]
+      ],
+      formOpened: false
     });
   };
 
@@ -140,7 +141,7 @@ export default class DashboardLayout extends React.PureComponent {
         />
         <WidgetEditForm
           open={formOpened}
-          isEditMode={true}
+          isEditMode={false}
           onSave={this.handleAddWidget}
           onClose={() => this.setState({ formOpened: false })}
         />
